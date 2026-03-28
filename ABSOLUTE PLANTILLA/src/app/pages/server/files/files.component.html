@@ -1,0 +1,96 @@
+<app-card cardTitle="Absolute File Manager">
+    <div slot="header-right" class="d-flex gap-2">
+        <button class="btn btn-outline-secondary d-flex align-items-center" (click)="goBack()"
+            [disabled]="!currentPath">
+            <i antIcon type="arrow-left" theme="outline" class="me-2"></i> Volver
+        </button>
+        <button class="btn btn-outline-primary d-flex align-items-center" (click)="createFolder()">
+            <i antIcon type="plus" theme="outline" class="me-2"></i> Nueva Carpeta
+        </button>
+        <button class="btn btn-primary d-flex align-items-center shadow-sm text-black fw-bold"
+            (click)="fileInput.click()">
+            <i antIcon type="upload" theme="outline" class="me-2"></i> Subir Archivo
+        </button>
+        <!-- Input invisible para Multer -->
+        <input type="file" #fileInput multiple (change)="onFileSelected($event)" style="display: none;">
+    </div>
+
+    <div class="mb-4 d-flex align-items-center p-4 rounded-lg border-0 shadow-sm" style="background: #0a0a0a;">
+        <i antIcon type="folder-open" theme="outline" class="text-white-50 me-3 f-22"></i>
+        <span class="text-white fw-bold font-monospace f-16" style="letter-spacing: 1px;">{{ currentPath || 'Raíz del
+            Servidor ( / )' }}</span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" style="border-collapse: separate; border-spacing: 0 8px;">
+            <thead>
+                <tr>
+                    <th class="border-0 text-white-50 text-uppercase f-11 fw-bold py-3 px-4"
+                        style="letter-spacing: 1.5px;">Nombre</th>
+                    <th class="border-0 text-white-50 text-uppercase f-11 fw-bold py-3 px-4"
+                        style="letter-spacing: 1.5px;">Tipo</th>
+                    <th class="border-0 text-white-50 text-uppercase f-11 fw-bold py-3 px-4"
+                        style="letter-spacing: 1.5px;">Tamaño</th>
+                    <th class="border-0 text-white-50 text-uppercase f-11 fw-bold py-3 text-end px-4">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (files.length === 0) {
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-muted">No se encontraron archivos en este directorio.
+                    </td>
+                </tr>
+                }
+                @for (file of files; track file.name) {
+                <tr>
+                    <td class="py-4 px-4 bg-surface-1" style="border-radius: 16px 0 0 16px; border: none;">
+                        <div class="d-flex align-items-center cursor-pointer"
+                            (click)="file.isDirectory ? navigateTo(file.path) : downloadFile(file)"
+                            [ngStyle]="{'cursor': 'pointer'}">
+                            <i antIcon [type]="file.isDirectory ? 'folder' : 'file'" theme="fill"
+                                [class]="file.isDirectory ? 'text-warning' : 'text-info'" class="me-3 f-26"></i>
+                            <span class="text-white fw-bold f-15">{{ file.name }}</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 bg-surface-1 text-white-50 f-14" style="border: none;">{{ file.isDirectory ?
+                        'Carpeta' : 'Archivo' }}</td>
+                    <td class="py-4 px-4 bg-surface-1 text-white fw-bold f-14" style="border: none;">{{
+                        formatSize(file.size) }}</td>
+                    <td class="text-end py-4 px-4 bg-surface-1" style="border-radius: 0 16px 16px 0; border: none;">
+                        <!-- Botón Renombrar (Tag) -->
+                        <button
+                            class="btn btn-link-info p-0 me-3 rounded-circle d-inline-flex justify-content-center align-items-center shadow-sm"
+                            style="width: 40px; height: 40px; background: rgba(0, 229, 255, 0.12); border: 1px solid rgba(0, 229, 255, 0.2);"
+                            (click)="renameFile(file)" title="Renombrar">
+                            <i antIcon type="tag" theme="outline" class="f-18"></i>
+                        </button>
+                        <!-- Botón Editar Contenido (Lápiz) -->
+                        @if (!file.isDirectory && isEditable(file.name)) {
+                        <button
+                            class="btn btn-link-warning p-0 me-3 rounded-circle d-inline-flex justify-content-center align-items-center shadow-sm"
+                            style="width: 40px; height: 40px; background: rgba(255, 193, 7, 0.15); border: 1px solid rgba(255, 193, 7, 0.3);"
+                            (click)="editFile(file)" title="Editar Contenido">
+                            <i antIcon type="edit" theme="outline" class="f-18 text-warning"></i>
+                        </button>
+                        }
+                        @if (!file.isDirectory) {
+                        <button
+                            class="btn btn-link-success p-0 me-3 rounded-circle d-inline-flex justify-content-center align-items-center shadow-sm"
+                            style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.1);"
+                            (click)="downloadFile(file)" title="Descargar">
+                            <i antIcon type="download" theme="outline" class="f-18"></i>
+                        </button>
+                        }
+                        <button
+                            class="btn btn-link-danger p-0 rounded-circle d-inline-flex justify-content-center align-items-center shadow-sm"
+                            style="width: 40px; height: 40px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.1);"
+                            (click)="deleteFile(file.path)" title="Eliminar">
+                            <i antIcon type="delete" theme="outline" class="f-18"></i>
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</app-card>

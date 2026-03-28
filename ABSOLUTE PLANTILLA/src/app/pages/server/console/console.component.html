@@ -1,0 +1,43 @@
+<app-card cardTitle="Server Management & Console" blockClass="pt-1 px-4 pb-4">
+    <!-- Modern Compact Centered Controls -->
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-3 py-2">
+        <button class="btn btn-outline-success flex-fill px-3 fw-bold shadow-sm d-flex align-items-center"
+            style="border-radius: 14px; background: rgba(16, 185, 129, 0.05); min-width: 100px; justify-content: center;"
+            (click)="startServer()" [disabled]="serverStatus !== 'offline'">
+            <i *ngIf="serverStatus === 'starting'" antIcon type="loading" theme="outline" class="me-2 f-18"></i> 
+            <i *ngIf="serverStatus !== 'starting'" antIcon type="play-circle" theme="outline" class="me-2 f-18"></i> 
+            {{ serverStatus === 'starting' ? 'Starting...' : (serverStatus === 'online' ? 'Online' : 'Start') }}
+        </button>
+        <button class="btn btn-outline-warning flex-fill px-3 fw-bold shadow-sm d-flex align-items-center"
+            style="border-radius: 14px; background: rgba(234, 179, 8, 0.05); min-width: 100px; justify-content: center;"
+            (click)="restartServer()">
+            <i antIcon type="reload" theme="outline" class="me-2 f-18"></i> Restart
+        </button>
+        <button class="btn btn-outline-danger flex-fill px-3 fw-bold shadow-sm d-flex align-items-center"
+            style="border-radius: 14px; background: rgba(239, 68, 68, 0.05); min-width: 100px; justify-content: center;"
+            (click)="stopServer()">
+            <i antIcon type="poweroff" theme="outline" class="me-2 f-18"></i> Stop
+        </button>
+        
+    </div>
+
+    <!-- Terminal Output -->
+    <div #scrollMe class="console-wrapper p-3 p-md-4 mb-4"
+        style="height: clamp(300px, 50vh, 450px); overflow-y: auto; font-family: 'JetBrains Mono', 'Fira Code', monospace; color: #e2e8f0; background-color: #000000 !important; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;">
+        <div *ngFor="let log of consoleOutput" class="console-line mb-1 d-flex">
+            <span class="text-white-50 me-2 f-10 mt-1">>></span>
+            <span class="text-break">{{ log }}</span>
+        </div>
+    </div>
+
+    <!-- Command Input -->
+    <div class="input-group shadow-sm"
+        style="border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+        <input type="text" class="form-control bg-surface-2 border-0 text-white px-3 py-3" placeholder="Command..."
+            [(ngModel)]="command" (keyup.enter)="sendCommand()">
+        <button class="btn btn-primary px-3 px-md-5 fw-bold text-black" type="button" (click)="sendCommand()">
+            <i antIcon type="send" theme="outline" class="me-1 me-md-2"></i> <span
+                class="d-none d-sm-inline">EXECUTE</span>
+        </button>
+    </div>
+</app-card>

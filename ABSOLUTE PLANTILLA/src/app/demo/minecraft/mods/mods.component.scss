@@ -1,0 +1,10 @@
+.mod-grid {
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #222;
+        border-radius: 10px;
+    }
+}

@@ -1,0 +1,86 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Absolute Music Studio 🎵" blockClass="p-0 overflow-hidden">
+            <div class="studio-header p-4 bg-dark-deep border-bottom border-secondary">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h4 class="text-white mb-2">Editor de Audio Inteligente</h4>
+                        <p class="text-white-50 small mb-0">Separa pistas, transcribe a partituras y analiza teoría
+                            musical con IA.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-dark border-secondary text-white"
+                                placeholder="Pega URL de YouTube o Nombre de Canción" [(ngModel)]="youtubeUrl">
+                            <button class="btn btn-primary" (click)="startProcessing()" [disabled]="isProcessing">
+                                <i class="anticon icon-rocket me-1"></i> {{ isProcessing ? processingStep : 'Procesar
+                                con IA' }}
+                            </button>
+                        </div>
+                        <!-- Barra de progreso real -->
+                        <div class="progress mt-2" *ngIf="isProcessing && progressPercent > 0"
+                            style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info"
+                                role="progressbar" [style.width.%]="progressPercent">
+                                {{ progressPercent }}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mixer Section -->
+            <div class="mixer-pane p-4 bg-darker">
+                <div class="row">
+                    <div class="col-md-3 mb-4" *ngFor="let stem of stems">
+                        <div class="stem-card p-3 rounded border border-secondary bg-dark-accent">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-primary fw-bold"><i class="anticon" [ngClass]="'icon-'+stem.icon"></i>
+                                    {{ stem.name }}</span>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn" [ngClass]="stem.muted ? 'btn-danger' : 'btn-outline-danger'" 
+                                        (click)="toggleMute(stem)">M</button>
+                                </div>
+                            </div>
+                            <!-- Contenedor del Audio Waveform -->
+                            <div class="waveform-container mb-3" [id]="'waveform-' + stem.id"></div>
+                            
+                            <input type="range" class="form-range custom-range" [(ngModel)]="stem.volume" (input)="onVolumeChange(stem)">
+                            <div class="text-end mt-1 small" [class.text-danger]="stem.muted" [class.text-white-50]="!stem.muted">{{ stem.volume }}%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Master Controls / DAW View -->
+            <div class="score-pane p-4 bg-dark text-white border-top border-secondary text-center" style="min-height: 200px;">
+                <div class="py-4" *ngIf="!currentJobId">
+                    <i class="anticon icon-sound display-3 text-muted mb-3 d-block"></i>
+                    <h5 class="text-muted">Procesa una canción para usar el mezclador inteligente</h5>
+                </div>
+                
+                <div *ngIf="currentJobId">
+                    <h5 class="text-primary mb-4">Controles Maestros</h5>
+                    
+                    <button class="btn btn-lg rounded-circle shadow-lg mx-2" 
+                        [ngClass]="isPlaying ? 'btn-danger' : 'btn-success'" 
+                        style="width: 70px; height: 70px;" 
+                        (click)="togglePlay()">
+                        <i class="anticon fs-3" [ngClass]="isPlaying ? 'icon-pause' : 'icon-caret-right'"></i>
+                    </button>
+                    
+                    <div class="mt-4">
+                        <a [href]="getMidiUrl()" target="_blank" class="btn btn-outline-info">
+                            <i class="anticon icon-download me-1"></i> Descargar Partitura MIDI
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-4 w-100 bg-white rounded shadow-sm" *ngIf="currentJobId">
+                    <!-- Contenedor estilo Songsterr -->
+                    <div id="alphaTab-container" style="width: 100%; min-height: 400px; max-height: 600px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </app-card>
+    </div>
+</div>

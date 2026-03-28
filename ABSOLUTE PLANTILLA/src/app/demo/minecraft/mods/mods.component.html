@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Installed Mods Gallery">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h5 class="text-white mb-1">Mods Cargados</h5>
+                    <p class="text-white-50 f-12 mb-0">Lista de modificaciones activas en tu servidor Fabric.</p>
+                </div>
+                <div class="badge bg-dark border border-secondary text-info px-3 py-2">
+                    {{ mods.length }} Mods Detectados
+                </div>
+            </div>
+
+            <hr class="border-secondary opacity-25">
+
+            <div class="mod-grid mt-4 overflow-auto" style="max-height: 60vh;">
+                <div class="row g-3">
+                    <div class="col-md-6 col-lg-4" *ngFor="let mod of mods">
+                        <div class="mod-card p-3 rounded-lg border border-dark shadow-sm h-100"
+                            style="background: #0a0a0a; transition: all 0.3s ease; border-left: 3px solid #00e5ff !important;">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="bg-dark rounded p-2 me-2">
+                                    <i class="anticon icon-api text-info f-20"></i>
+                                </div>
+                                <code class="text-white-25 f-10 text-truncate ms-2">{{ mod.name }}</code>
+                            </div>
+                            <h6 class="text-white mb-0 text-truncate" [title]="mod.name">{{ mod.name.replace('.jar', '')
+                                }}</h6>
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-center py-5" *ngIf="mods.length === 0 && !loading">
+                        <i class="anticon icon-inbox display-1 text-muted opacity-25 mb-3 d-block"></i>
+                        <h4 class="text-muted">No se encontraron mods</h4>
+                        <p class="text-muted f-12">Asegúrate de que la carpeta 'mods' existe y contiene archivos .jar
+                        </p>
+                    </div>
+
+                    <div class="col-12 text-center py-4" *ngIf="loading">
+                        <div class="spinner-border text-info" role="status"></div>
+                    </div>
+                </div>
+            </div>
+        </app-card>
+    </div>
+</div>
+
+<style>
+    .mod-card:hover {
+        background: #111 !important;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 229, 255, 0.1) !important;
+    }
+</style>

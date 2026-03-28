@@ -1,0 +1,62 @@
+<app-navigation class="pc-sidebar" [ngClass]="{
+    'navbar-collapsed': navCollapsed,
+    'mob-open': navCollapsedMob
+  }" (NavCollapsedMob)="navMobClick()" (NavCollapse)="this.navCollapsed = !this.navCollapsed" />
+<app-nav-bar (NavCollapsedMob)="navMobClick()" (NavCollapse)="this.navCollapsed = !this.navCollapsed" />
+<div class="pc-container">
+  <div class="coded-wrapper">
+    <div class="coded-content">
+      <div class="coded-inner-content">
+        <app-breadcrumb />
+        <div class="main-body">
+          <div class="page-wrapper">
+            <router-outlet />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pc-menu-overlay" (click)="closeMenu()" (keydown)="handleKeyDown($event)" tabindex="0"></div>
+</div>
+
+<footer class="pc-footer" style="background: #000; border-top: 1px solid rgba(255,255,255,0.05); padding: 12px 0;">
+  <div class="footer-wrapper container-fluid">
+    <div class="row align-items-center">
+      <div class="col-md-4 my-1 text-center text-md-start">
+        <p class="m-0 text-white-50 fw-bold" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+          ABSOLUTE <span class="text-primary">DASHBOARD</span> &copy; 2026
+        </p>
+      </div>
+      <div class="col-md-8 my-1">
+        <div
+          class="d-flex justify-content-center justify-content-md-end align-items-center gap-3 gap-lg-4 text-white-50 flex-wrap"
+          style="font-size: 0.85rem;">
+          <!-- Live Status Items -->
+          <div class="d-flex align-items-center gap-2">
+            <i antIcon type="cloud" theme="outline" class="text-primary"></i>
+            <span class="d-none d-sm-inline">{{ serverStats.status | uppercase }}</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i antIcon type="monitor" theme="outline" class="text-info"></i>
+            <span>CPU: <span class="text-white">{{ serverStats.cpu }}%</span></span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i antIcon type="setting" theme="outline" class="text-warning"></i>
+            <span>RAM: <span class="text-white">{{ serverStats.ram }} MB</span></span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i antIcon type="database" theme="outline" class="text-success"></i>
+            <span>Disk: <span class="text-white">{{ serverStats.size }}</span></span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i antIcon type="api" theme="outline" class="text-danger"></i>
+            <span>Ping: <span class="text-white">{{ serverStats.ping }}ms</span></span>
+          </div>
+          <div class="d-flex align-items-center gap-2 border-start ps-3 border-secondary">
+            <span class="fw-bold text-white">v1.21+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

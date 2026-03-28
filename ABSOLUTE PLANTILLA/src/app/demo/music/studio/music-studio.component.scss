@@ -1,0 +1,30 @@
+.bg-dark-deep {
+    background: #0a0c10;
+}
+
+.bg-darker {
+    background: #12151c;
+}
+
+.bg-dark-accent {
+    background: #1a1e28;
+}
+
+.stem-card {
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #00e5ff;
+        box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
+    }
+}
+
+.custom-range {
+    &::-webkit-slider-thumb {
+        background: #00e5ff;
+    }
+}
+
+.studio-header {
+    border-left: 4px solid #00e5ff;
+}

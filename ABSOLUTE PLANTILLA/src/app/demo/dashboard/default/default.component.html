@@ -1,0 +1,245 @@
+<div class="row g-4">
+  <!-- Hardware Status -->
+  <div class="col-md-6 col-xl-3">
+    <app-card [showHeader]="false" blockClass="p-4">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <h6 class="text-white-50 mb-2 text-uppercase fw-bold" style="letter-spacing: 0.5px;">CPU Usage</h6>
+          <h3 class="mb-0 fw-bold text-white">{{ serverStats.cpu }}%</h3>
+        </div>
+        <div class="d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+          <i antIcon type="monitor" theme="outline" class="f-28 text-primary"></i>
+        </div>
+      </div>
+    </app-card>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <app-card [showHeader]="false" blockClass="p-4">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <h6 class="text-white-50 mb-2 text-uppercase fw-bold" style="letter-spacing: 0.5px;">RAM Used</h6>
+          <h3 class="mb-0 fw-bold text-white">{{ serverStats.ram }} MB</h3>
+        </div>
+        <div class="d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+          <i antIcon type="setting" theme="outline" class="f-28 text-warning"></i>
+        </div>
+      </div>
+    </app-card>
+  </div>
+
+  <!-- Minecraft Stats -->
+  <div class="col-md-6 col-xl-3">
+    <app-card [showHeader]="false" blockClass="p-4">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <h6 class="text-white-50 mb-2 text-uppercase fw-bold" style="letter-spacing: 0.5px;">Mods Installed</h6>
+          <h3 class="mb-0 fw-bold text-white">{{ serverStats.mods }}</h3>
+        </div>
+        <div class="d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+          <i antIcon type="api" theme="outline" class="f-28 text-success"></i>
+        </div>
+      </div>
+    </app-card>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <app-card [showHeader]="false" blockClass="p-4">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <h6 class="text-white-50 mb-2 text-uppercase fw-bold" style="letter-spacing: 0.5px;">Disk Usage</h6>
+          <h3 class="mb-0 fw-bold text-white">{{ serverStats.size }}</h3>
+        </div>
+        <div class="d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+          <i antIcon type="database" theme="outline" class="f-28 text-danger"></i>
+        </div>
+      </div>
+    </app-card>
+  </div>
+</div>
+
+<div class="row g-4 mt-1">
+  <div class="col-md-12 col-xl-8">
+    <app-card cardTitle="System Connectivity & Network" blockClass="p-0">
+      <div class="row g-0">
+        <!-- Connectivity Status -->
+        <div class="col-6 col-md-3 p-3 p-md-4 border-end border-bottom border-dark"
+          style="border-color: rgba(255,255,255,0.05) !important;">
+          <div class="text-center">
+            <h6 class="text-white-50 mb-3 text-uppercase fw-bold f-10" style="letter-spacing: 1px;">Status</h6>
+            <span class="badge px-3 py-2 f-10 f-md-12 shadow-lg"
+              [ngClass]="serverStatus === 'online' ? 'bg-success' : 'bg-danger'" style="border-radius: 10px;">
+              <i antIcon [type]="serverStatus === 'online' ? 'check-circle' : 'close-circle'" theme="outline"
+                class="me-1"></i>
+              {{ serverStatus.toUpperCase() }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Network Info -->
+        <div class="col-6 col-md-3 p-3 p-md-4 border-end border-bottom border-dark"
+          style="border-color: rgba(255,255,255,0.05) !important;">
+          <div class="text-center">
+            <h6 class="text-white-50 mb-2 text-uppercase fw-bold f-10" style="letter-spacing: 1px;">Minecraft IP</h6>
+            <h5 class="mb-0 fw-bold text-info f-12 f-md-14">{{ networkInfo.minecraftIp }}</h5>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 p-3 p-md-4 border-end border-dark"
+          style="border-color: rgba(255,255,255,0.05) !important;">
+          <div class="text-center">
+            <h6 class="text-white-50 mb-2 text-uppercase fw-bold f-10" style="letter-spacing: 1px;">ZeroTier IP</h6>
+            <h5 class="mb-0 fw-bold text-white f-12 f-md-14">{{ networkInfo.zeroTierIp }}</h5>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 p-3 p-md-4">
+          <div class="text-center">
+            <h6 class="text-white-50 mb-2 text-uppercase fw-bold f-10" style="letter-spacing: 1px;">ZT ID</h6>
+            <code class="text-warning f-10 d-block mt-1">{{ networkInfo.zeroTierId }}</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark p-3 d-flex justify-content-between align-items-center flex-wrap gap-2"
+        style="background: rgba(255,100,100,0.05) !important; border-top: 1px solid rgba(255,255,255,0.05);"
+        *ngIf="isHost">
+        <div class="d-flex align-items-center">
+            <i antIcon type="warning" theme="outline" class="text-danger me-2"></i>
+            <span class="text-danger f-11 fw-bold">PELIGRO: ZONA DE ADMINISTRACIÓN</span>
+        </div>
+        <button class="btn btn-sm btn-outline-danger f-11 fw-bold px-3 py-2 shadow-sm" (click)="closeHost()">
+            <i antIcon type="close-circle" theme="outline" class="me-1"></i> CERRAR TODO EL HOST
+        </button>
+      </div>
+
+      <!-- Additional Details Footer in Card -->
+      <div class="bg-dark p-3 d-flex justify-content-around align-items-center flex-wrap gap-2"
+        style="background: rgba(255,255,255,0.02) !important; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="d-flex align-items-center">
+          <span class="text-white-25 f-11 me-2">CLOUD TUNNEL:</span>
+          <span class="text-info f-11 fw-bold">{{ mcService.getDownloadUrl('').split('/files/download')[0] }}</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <span class="text-white-25 f-11 me-2">BACKEND PORT:</span>
+          <span class="text-white-50 f-11 fw-bold">{{ mcService.apiUrl.split(':').pop() }}</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <span class="text-white-25 f-11 me-2">UPTIME:</span>
+          <span class="text-white-50 f-11 fw-bold">{{ getUptimeFormat() }}</span>
+        </div>
+      </div>
+    </app-card>
+  </div>
+
+  <div class="col-md-12 col-xl-4">
+    <app-card cardTitle="Players Online" blockClass="p-4 h-100">
+      <div class="d-flex align-items-center mb-4">
+        <h3 class="mb-0 fw-bold text-white me-2">{{ serverStats.players?.length || 0 }}</h3>
+        <span class="text-white-50">jugadores activos</span>
+      </div>
+
+      <div class="player-list-scroll custom-scrollbar" style="max-height: 180px; overflow-y: auto;">
+        <div class="d-flex flex-wrap gap-2" *ngIf="serverStats.players?.length > 0; else noPlayers">
+          <div *ngFor="let player of serverStats.players"
+            class="player-badge d-flex align-items-center bg-dark border border-secondary p-1 pe-2 rounded-pill shadow-sm"
+            [title]="player">
+            <img [src]="getPlayerSkin(player)" class="rounded-circle me-2"
+              style="width: 24px; height: 24px; border: 1px solid rgba(255,255,255,0.1);">
+            <span class="f-12 text-white-50 fw-medium text-truncate" style="max-width: 80px;">{{ player }}</span>
+          </div>
+        </div>
+        <ng-template #noPlayers>
+          <div class="text-center py-4 opacity-50">
+            <i antIcon type="frown" theme="outline" class="f-32 mb-2 d-block"></i>
+            <small>Nadie en el mundo ahora mismo</small>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="mt-4 pt-3 border-top border-dark" style="border-color: rgba(255,255,255,0.05) !important;">
+        <a routerLink="/server/whitelist" class="btn btn-link-primary p-0 f-12 fw-bold">
+          <i antIcon type="user-add" theme="outline" class="me-1"></i> Gestionar Whitelist
+        </a>
+      </div>
+    </app-card>
+  </div>
+
+  <div class="col-md-12 col-xl-4">
+    <app-card cardTitle="Web Sessions Active" blockClass="p-4 h-100">
+      <div class="d-flex align-items-center mb-4">
+        <h3 class="mb-0 fw-bold text-info me-2">{{ activeWebSessions.length }}</h3>
+        <span class="text-white-50">personas conectadas</span>
+      </div>
+
+      <div class="session-list-scroll custom-scrollbar" style="max-height: 180px; overflow-y: auto;">
+        <table class="table table-dark table-borderless table-sm mb-0 f-12" *ngIf="activeWebSessions.length > 0; else noSessions">
+            <thead>
+                <tr class="text-white-25">
+                    <th>Usuario</th>
+                    <th>IP Address</th>
+                    <th *ngIf="isHost">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let session of activeWebSessions">
+                    <td class="text-white-50 align-middle">
+                        <span class="badge" [ngClass]="session.role === 'host' ? 'bg-primary' : 'bg-secondary'">
+                            {{ session.role === 'host' ? 'Host' : 'Visitor' }}
+                        </span>
+                        {{ session.name }}
+                    </td>
+                    <td class="text-info align-middle"><code>{{ session.ip }}</code></td>
+                    <td *ngIf="isHost" class="align-middle">
+                        <button *ngIf="session.role !== 'host'" 
+                                class="btn btn-link-danger p-0" 
+                                (click)="kickWebUser(session.name)"
+                                title="Desconectar usuario">
+                            <i antIcon type="close-circle" theme="outline"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ng-template #noSessions>
+          <div class="text-center py-4 opacity-50">
+            <i antIcon type="frown" theme="outline" class="f-32 mb-2 d-block"></i>
+            <small>Cero conexiones remotas</small>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="mt-4 pt-3 border-top border-dark" style="border-color: rgba(255,255,255,0.05) !important;" *ngIf="isHost">
+        <small class="text-white-25">Puedes ver y gestionar los visitantes conectados en tiempo real.</small>
+      </div>
+    </app-card>
+  </div>
+
+  <div class="col-md-12 col-xl-4">
+    <app-card cardTitle="Performance History" blockClass="p-0 h-100">
+      <div class="p-3 pb-0">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <div class="d-flex align-items-center">
+            <span class="badge bg-primary bg-opacity-10 text-primary me-2 f-12">CPU</span>
+            <span class="badge bg-warning bg-opacity-10 text-warning f-12">RAM</span>
+          </div>
+          <small class="text-white-50">Real-time (2s window)</small>
+        </div>
+      </div>
+      <apx-chart 
+        *ngIf="chartOptions"
+        [series]="chartOptions.series" 
+        [chart]="chartOptions.chart" 
+        [colors]="chartOptions.colors" 
+        [stroke]="chartOptions.stroke" 
+        [fill]="chartOptions.fill" 
+        [dataLabels]="chartOptions.dataLabels" 
+        [xaxis]="chartOptions.xaxis" 
+        [yaxis]="chartOptions.yaxis" 
+        [grid]="chartOptions.grid" 
+        [theme]="chartOptions.theme" 
+        [legend]="chartOptions.legend">
+      </apx-chart>
+    </app-card>
+  </div>
+</div>

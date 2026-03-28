@@ -1,0 +1,13 @@
+// ============================
+//     Badge css start
+// ============================
+
+.badge {
+  @each $color, $value in $theme-colors {
+    &.bg-light-#{$color} {
+      background: rgba($value, 0.15); // Fondo sutil
+      color: $value; // Texto del color del tema (vibrante)
+      border-color: rgba($value, 0.2);
+    }
+  }
+}

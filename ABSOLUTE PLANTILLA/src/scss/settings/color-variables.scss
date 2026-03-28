@@ -1,0 +1,86 @@
+// =======================================
+//   MC Server Dashboard - Neon Dark Color System
+// =======================================
+
+// Base dark backgrounds (True Black - Professional High-End Theme)
+$bg-base: #000000; // The Void
+$bg-surface-1: #0a0a0a; // Primary Cards
+$bg-surface-2: #141414; // Secondary Inner Sections
+$bg-surface-3: #1f1f1f; // Hover / Active elevation
+
+// Border colors
+$border-subtle: rgba(255, 255, 255, 0.03);
+$border-visible: rgba(255, 255, 255, 0.07);
+$border-active: rgba(255, 255, 255, 0.12);
+
+// Gray scale (dark-first)
+$white: #ffffff;
+$gray-100: #f8fafc;
+$gray-200: #f1f5f9;
+$gray-300: #e2e8f0;
+$gray-400: #94a3b8;
+$gray-500: #64748b;
+$gray-600: #475569;
+$gray-700: #334155;
+$gray-800: #1e293b;
+$gray-900: #0f172a;
+$black: #000000;
+
+// Accent — Professional Silver/Slate (High End)
+$blue: #f8fafc; // Bright Silver
+$blue-100: rgba(248, 250, 252, 0.05);
+$blue-200: rgba(248, 250, 252, 0.10);
+$blue-300: rgba(248, 250, 252, 0.20);
+$blue-400: rgba(248, 250, 252, 0.40);
+$blue-500: #f8fafc;
+$blue-600: #e2e8f0;
+$blue-700: #cbd5e1;
+$blue-800: #94a3b8;
+$blue-900: #64748b;
+
+// Semantic colors (Neon variants)
+$indigo: #8b5cf6;
+$purple: #d946ef;
+$pink: #ec4899;
+$red: #ef4444;
+$orange: #f97316;
+$yellow: #eab308;
+$green: #10b981;
+$teal: #14b8a6;
+$cyan: #06b6d4;
+
+// Semantic aliases
+$indigo-500: $indigo;
+$purple-500: $purple;
+$pink-500: $pink;
+$red-500: $red;
+$orange-500: $orange;
+$yellow-500: $yellow;
+$green-500: $green;
+$teal-500: $teal;
+$cyan-500: $cyan;
+
+// Replaced deprecated darken() with hardcoded HEX to maintain a clean console
+$cyan-700: #1a8494;
+$green-600: #2f7c58;
+$red-600: #ac3333;
+$yellow-700: #a8821d;
+
+// More color shades for green/red used by generic.scss
+$green-100: rgba(76, 175, 129, 0.12);
+$green-200: rgba(76, 175, 129, 0.25);
+$red-100: rgba(240, 92, 92, 0.12);
+$red-200: rgba(240, 92, 92, 0.25);
+$yellow-100: rgba(245, 197, 66, 0.12);
+$yellow-200: rgba(245, 197, 66, 0.25);
+$cyan-100: rgba(54, 184, 200, 0.12);
+$cyan-200: rgba(54, 184, 200, 0.25);
+$teal-100: rgba(45, 212, 191, 0.12);
+$teal-200: rgba(45, 212, 191, 0.25);
+
+// Preset accent (used by preset-style.scss)
+$preset-colors: (
+  preset-1: (primary: #4f8ef7)
+);
+
+$dark-bg-color: $bg-base;

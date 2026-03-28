@@ -1,0 +1,9 @@
+[
+  {
+    "id": "example_id",
+    "hostName": "Example Host",
+    "password": "example_password",
+    "token": "example_token",
+    "createdAt": "2026-03-26T00:00:00.000Z"
+  }
+]

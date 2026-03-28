@@ -1,0 +1,60 @@
+<div class="row">
+    <div class="col-md-12">
+        <app-card cardTitle="The Music Brain 🧠" [showHeader]="true">
+            <div class="theory-container p-3">
+                <h5 class="text-white mb-4"><i class="anticon icon-bulb text-warning me-2"></i> Diccionario Maestro de
+                    Armonía</h5>
+
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <label class="text-white-50 mb-2 small d-block">Selecciona Tonalidad (Root)</label>
+                        <div class="btn-group flex-wrap">
+                            <button *ngFor="let r of roots" class="btn btn-outline-primary m-1"
+                                [class.active]="r === selectedRoot" (click)="selectRoot(r)">{{ r }}</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-white-50 mb-2 small d-block">Selecciona Escala / Modo</label>
+                        <div class="btn-group flex-wrap">
+                            <button *ngFor="let s of scales" class="btn btn-outline-info m-1"
+                                [class.active]="s.name === selectedScale" (click)="selectScale(s.name)">{{ s.label }}</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="result-section p-4 rounded bg-dark-accent border border-secondary mb-4">
+                            <h6 class="text-primary mb-3">Escala Generada: {{ selectedRoot }} {{ selectedScale }}</h6>
+                            <div class="d-flex gap-3">
+                                <div *ngFor="let n of calculatedNotes"
+                                    class="note-box p-3 bg-primary text-black fw-bold rounded shadow-sm text-center"
+                                    style="min-width: 60px;">
+                                    {{ n }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="result-section p-4 rounded bg-dark-accent border border-secondary">
+                            <h6 class="text-info mb-3">Acordes Propios (Campo Armónico)</h6>
+                            <div class="d-flex gap-3 flex-wrap">
+                                <div *ngFor="let c of chords"
+                                    class="chord-box p-3 border border-info text-info fw-bold rounded text-center"
+                                    style="min-width: 80px;">
+                                    {{ c }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="info-card p-4 rounded bg-primary-light text-white">
+                            <h6>💡 Tip Armónico</h6>
+                            <p class="small mb-0 opacity-75">{{ dynamicTip }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </app-card>
+    </div>
+</div>

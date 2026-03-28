@@ -1,0 +1,185 @@
+<div class="login-wrapper bg-dark text-white d-flex align-items-center justify-content-center min-vh-100">
+  <div class="login-card p-4 rounded-4 shadow-lg" style="width: 100%; max-width: 450px; background: #121212; border: 1px solid rgba(255,255,255,0.05);">
+    
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-primary mb-1">Absolute</h2>
+      <p class="text-white-50 small">Panel de Control & Inteligencia Artificial</p>
+    </div>
+
+    <!-- MODO SELECCIÓN -->
+    <div *ngIf="mode === 'select'" class="d-flex flex-column gap-3">
+      <h5 class="text-center mb-3 text-white">Selecciona tu rol</h5>
+      
+      <button class="btn btn-outline-primary p-3 text-start rounded-3" (click)="setMode('host')">
+        <div class="d-flex align-items-center">
+          <div class="icon-circle bg-primary bg-opacity-10 text-primary me-3">
+            <i class="feather icon-server f-20"></i>
+          </div>
+          <div>
+            <h6 class="mb-1 text-white">Host (Administrador)</h6>
+            <small class="text-white-50">Iniciar y configurar los servicios del servidor.</small>
+          </div>
+        </div>
+      </button>
+
+      <button class="btn btn-outline-info p-3 text-start rounded-3" (click)="setMode('visitor')">
+        <div class="d-flex align-items-center">
+          <div class="icon-circle bg-info bg-opacity-10 text-info me-3">
+            <i class="feather icon-users f-20"></i>
+          </div>
+          <div>
+            <h6 class="mb-1 text-white">Visitante</h6>
+            <small class="text-white-50">Conectarte a una sesión existente.</small>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <!-- MODO HOST -->
+    <div *ngIf="mode === 'host'">
+      <div class="d-flex align-items-center mb-4">
+        <button class="btn btn-sm btn-link text-white-50 p-0 me-2" (click)="setMode('select')">
+          <i class="feather icon-arrow-left f-20"></i>
+        </button>
+        <h5 class="mb-0 text-white">Acceso Host</h5>
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger bg-danger bg-opacity-10 border-danger text-danger py-2 px-3 small rounded-3">
+        {{ error }}
+      </div>
+
+      <form [formGroup]="hostForm" (ngSubmit)="hostStep === 0 ? onHostNextStep() : onHostSubmit()">
+        <!-- Paso 1: Master Password -->
+        <div *ngIf="hostStep === 0">
+          <div class="form-group mb-4">
+            <label class="form-label text-white-50 small">Contraseña Maestra</label>
+            <input type="password" class="form-control bg-dark text-white border-secondary" formControlName="masterPassword" placeholder="Solo para el dueño del sistema">
+          </div>
+          <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-bold" [disabled]="!hostForm.get('masterPassword')?.value">
+            Validar <i class="feather icon-arrow-right ms-1"></i>
+          </button>
+        </div>
+
+        <!-- Paso 2: Configuración -->
+        <div *ngIf="hostStep === 1">
+          <p class="text-success small mb-3"><i class="feather icon-check-circle me-1"></i> Validado correctamente. Configura la sesión actual:</p>
+          
+          <div class="form-group mb-3">
+            <label class="form-label text-white-50 small">Nombre del Host</label>
+            <input type="text" class="form-control bg-dark text-white border-secondary" formControlName="hostName">
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label text-white-50 small">Contraseña para visitantes</label>
+            <input type="password" class="form-control bg-dark text-white border-secondary" formControlName="sessionPassword" placeholder="Crea una contraseña para esta sesión">
+          </div>
+
+          <hr class="border-secondary my-4">
+          <h6 class="text-white mb-3 f-12 text-uppercase text-white-50">Rutas del Sistema (Obligatorio)</h6>
+
+          <div class="form-group mb-3">
+            <label class="form-label text-white-50 small">Ruta Servidor Minecraft <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input type="text" class="form-control bg-dark text-white border-secondary f-12" formControlName="mcPath" placeholder="Haz clic en la carpeta para seleccionar">
+              <button type="button" class="btn btn-outline-secondary" (click)="openExplorer('mcPath')" [disabled]="explorerLoading">
+                <i class="feather icon-folder" *ngIf="!explorerLoading"></i>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="explorerLoading"></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group mb-4">
+            <label class="form-label text-white-50 small">Ruta Carpeta Compartida <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input type="text" class="form-control bg-dark text-white border-secondary f-12" formControlName="sharedPath" placeholder="Haz clic en la carpeta para seleccionar">
+              <button type="button" class="btn btn-outline-secondary" (click)="openExplorer('sharedPath')" [disabled]="explorerLoading">
+                <i class="feather icon-folder" *ngIf="!explorerLoading"></i>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="explorerLoading"></span>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-bold" [disabled]="hostForm.invalid || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            Iniciar Sistema
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- MODO VISITANTE -->
+    <div *ngIf="mode === 'visitor'">
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center">
+          <button class="btn btn-sm btn-link text-white-50 p-0 me-2" (click)="setMode('select')">
+            <i class="feather icon-arrow-left f-20"></i>
+          </button>
+          <h5 class="mb-0 text-white">Visitante</h5>
+        </div>
+        <button class="btn btn-sm btn-link text-primary p-0" (click)="loadSessions()" [disabled]="loading">
+          <i class="feather icon-refresh-cw" [class.fa-spin]="loading"></i>
+        </button>
+      </div>
+
+      <!-- Estado: cargando -->
+      <div *ngIf="loading" class="text-center py-4">
+        <div class="spinner-border text-info mb-3" role="status"></div>
+        <p class="text-white-50 small mb-0">Buscando sesiones activas...</p>
+      </div>
+
+      <!-- Estado: error de conexión -->
+      <div *ngIf="error && !loading" class="alert bg-danger bg-opacity-10 border-danger rounded-3 p-3 mb-3">
+        <div class="d-flex align-items-start">
+          <i class="feather icon-wifi-off text-danger me-2 mt-1"></i>
+          <div>
+            <p class="text-danger fw-bold mb-1 small">No se pudo conectar al servidor</p>
+            <p class="text-danger text-opacity-75 small mb-0">{{ error }}</p>
+            <hr class="border-danger border-opacity-25 my-2">
+            <p class="text-white-50 small mb-0">Asegúrate de que el Host haya iniciado sesión primero.</p>
+          </div>
+        </div>
+        <button class="btn btn-outline-danger w-100 mt-3 btn-sm" (click)="loadSessions()">Reintenar</button>
+      </div>
+
+      <!-- Estado: sin sesiones -->
+      <div *ngIf="sessions.length === 0 && !loading && !error" class="text-center py-4">
+        <i class="feather icon-clock f-30 text-warning mb-2 d-block"></i>
+        <p class="text-white fw-bold small mb-1">Esperando al Host...</p>
+        <p class="text-white-50 small mb-3">No hay sesiones activas. Pídele al Host que inicie sesión primero.</p>
+        <button class="btn btn-outline-info btn-sm" (click)="loadSessions()">
+          <i class="feather icon-refresh-cw me-1"></i> Buscar de nuevo
+        </button>
+      </div>
+
+      <!-- Estado: sesiones disponibles -->
+      <form *ngIf="sessions.length > 0 && !loading" [formGroup]="visitorForm" (ngSubmit)="onVisitorSubmit()">
+        <div class="form-group mb-3">
+          <label class="form-label text-white-50 small">Seleccionar Host</label>
+          <select class="form-select bg-dark text-white border-secondary" formControlName="sessionId">
+            <option value="" disabled selected>-- Elige una sesión --</option>
+            <option *ngFor="let s of sessions" [value]="s.id">{{ s.hostName }} (Iniciada: {{ s.createdAt | date:'shortTime' }})</option>
+          </select>
+        </div>
+
+        <div class="form-group mb-3">
+          <label class="form-label text-white-50 small">Tu Nombre Visible</label>
+          <input type="text" class="form-control bg-dark text-white border-secondary" formControlName="visitorName" placeholder="Ej: Invitado_1">
+        </div>
+
+        <div class="form-group mb-4">
+          <label class="form-label text-white-50 small">Contraseña de Sesión</label>
+          <input type="password" class="form-control bg-dark text-white border-secondary" formControlName="password" placeholder="La contraseña que te dio el Host">
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger bg-danger bg-opacity-10 border-danger text-danger py-2 px-3 small rounded-3 mb-3">
+          {{ error }}
+        </div>
+
+        <button type="submit" class="btn btn-info w-100 py-2 rounded-3 fw-bold text-dark" [disabled]="visitorForm.invalid || loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          Conectar al Panel
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

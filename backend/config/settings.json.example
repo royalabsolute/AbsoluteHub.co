@@ -1,0 +1,4 @@
+{
+  "mcPath": "/path/to/your/minecraft_server",
+  "sharedPath": "/path/to/your/shared_files"
+}

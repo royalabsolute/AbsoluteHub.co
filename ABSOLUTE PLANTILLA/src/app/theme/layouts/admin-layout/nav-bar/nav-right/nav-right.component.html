@@ -1,0 +1,38 @@
+<ul class="list-unstyled">
+  <li class="dropdown pc-h-item" ngbDropdown placement="bottom-end">
+    <a class="pc-head-link dropdown-toggle arrow-none me-0 shadow-sm" ngbDropdownToggle>
+      <i class="feather icon-users"></i>
+      <span *ngIf="connectedUsers.length > 0" class="badge bg-danger rounded-pill ms-1 border border-dark position-absolute top-0 start-100 translate-middle" style="font-size: 0.6rem; padding: 0.2rem 0.4rem;">
+        {{ connectedUsers.length }}
+      </span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-end pc-h-dropdown" ngbDropdownMenu>
+      <div class="dropdown-header d-flex align-items-center justify-content-between">
+        <h5 class="flex-grow-1 m-0">Usuarios Conectados</h5>
+      </div>
+      <div class="dropdown-divider"></div>
+      <div class="p-3" style="max-height: 300px; overflow-y: auto;">
+        <div *ngIf="connectedUsers.length === 0" class="text-center text-muted small my-3">
+          Nadie conectado en esta sesión.
+        </div>
+        <div *ngFor="let user of connectedUsers" class="d-flex align-items-center mb-3">
+          <div class="flex-shrink-0">
+            <div class="avtar avtar-s bg-light-primary">
+              <i class="feather icon-user f-18"></i>
+            </div>
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <h6 class="mb-1">{{ user.name }}</h6>
+            <small class="text-muted">{{ user.role }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </li>
+
+  <li class="dropdown pc-h-item">
+    <a (click)="logout()" class="pc-head-link me-0" title="Cerrar Sesión" style="cursor: pointer;">
+      <i class="feather icon-power text-danger"></i>
+    </a>
+  </li>
+</ul>

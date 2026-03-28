@@ -1,0 +1,5 @@
+{
+    "maxRam": "8G",
+    "minRam": "4G",
+    "jarName": "fabric-server-launch.jar"
+}

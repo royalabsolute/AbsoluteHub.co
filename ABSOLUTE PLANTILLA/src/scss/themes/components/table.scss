@@ -1,0 +1,45 @@
+.table {
+  &.table-align-center {
+
+    td,
+    th {
+      vertical-align: middle;
+    }
+  }
+
+  thead th {
+    padding: 0.9rem 0.75rem;
+  }
+
+  td,
+  th {
+    vertical-align: middle;
+
+    &:first-child {
+      padding-left: 24px;
+    }
+
+    &:last-child {
+      padding-right: 24px;
+    }
+  }
+
+  &.table-borderless {
+
+    td,
+    th {
+      border: none !important;
+    }
+  }
+
+  thead th {
+    background-color: $bg-surface-2;
+    border-top: 1px solid $border-subtle;
+    border-bottom: 2px solid $border-subtle;
+    font-size: 12px;
+  }
+}
+
+.table-hover tbody tr:hover {
+  background-color: $bg-surface-3;
+}

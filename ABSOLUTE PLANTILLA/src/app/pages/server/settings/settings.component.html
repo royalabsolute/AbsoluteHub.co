@@ -1,0 +1,151 @@
+<app-card cardTitle="Minecraft Server Settings">
+    <div slot="header-right" class="d-flex gap-2">
+        <button class="btn btn-outline-info d-flex align-items-center" (click)="loadSettings()" [disabled]="loading">
+            <i antIcon type="sync" [theme]="loading ? 'outline' : 'outline'" [class.fa-spin]="loading" class="me-2"></i>
+            Recargar
+        </button>
+        <button class="btn btn-primary d-flex align-items-center shadow-sm text-black fw-bold" (click)="saveSettings()"
+            [disabled]="loading || settingKeys.length === 0">
+            <i antIcon type="save" theme="outline" class="me-2"></i> Guardar Cambios
+        </button>
+    </div>
+
+    @if (loadingStartup) {
+    <div class="text-center py-4 mb-4" style="background: #0a0a0a; border-radius: 20px;">
+        <div class="spinner-border spinner-border-sm text-info" role="status"></div>
+        <span class="ms-2 text-white-50">Cargando configuración de inicio...</span>
+    </div>
+    } @else {
+    <!-- Startup Configuration Section -->
+    <div class="startup-section mb-5 p-4 rounded-xl shadow-lg" style="background: #050505; border: 1px solid #141414;">
+        <h5 class="text-white mb-4 d-flex align-items-center">
+            <i antIcon type="setting" theme="outline" class="me-2 text-info"></i> Startup Configuration
+        </h5>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <label class="text-white-50 mb-2 d-block f-13">Maximum RAM (-Xmx)</label>
+                <select class="form-select bg-dark text-white border-dark custom-select"
+                    [(ngModel)]="startupConfig.maxRam">
+                    @for (opt of ramOptions; track opt) {
+                    <option [value]="opt">{{ opt }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="text-white-50 mb-2 d-block f-13">Minimum RAM (-Xms)</label>
+                <select class="form-select bg-dark text-white border-dark custom-select"
+                    [(ngModel)]="startupConfig.minRam">
+                    @for (opt of ramOptions; track opt) {
+                    <option [value]="opt">{{ opt }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="text-white-50 mb-2 d-block f-13">Server JAR File</label>
+                <input type="text" class="form-control bg-dark text-white border-dark"
+                    [(ngModel)]="startupConfig.jarName" placeholder="server.jar">
+            </div>
+        </div>
+        <div class="mt-3">
+            <p class="text-white-25 f-11 mb-0"><i class="fas fa-info-circle me-1"></i> Estos ajustes requieren reiniciar
+                el servidor para aplicarse correctamente.</p>
+        </div>
+    </div>
+
+    <hr class="my-5 border-dark" style="opacity: 0.1;">
+    }
+
+    @if (loading) {
+    <div class="text-center py-5">
+        <div class="spinner-border text-info" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+        <p class="mt-3 text-white-50">Leyendo configuración del servidor...</p>
+    </div>
+    } @else {
+    @if (settingKeys.length === 0) {
+    <div class="alert alert-dark border-0 shadow-sm text-center py-5" style="background: #0a0a0a; border-radius: 20px;">
+        <i antIcon type="setting" theme="outline" class="f-40 text-white-25 mb-3"></i>
+        <h4 class="text-white">Sin Ajustes Disponibles</h4>
+        <p class="text-white-50">No se pudo cargar el archivo server.properties.</p>
+        <button class="btn btn-outline-primary mt-3" (click)="loadSettings()">Reintentar</button>
+    </div>
+    } @else {
+    <div class="settings-grid">
+        @for (key of settingKeys; track key) {
+        <div class="setting-item p-4 rounded-xl border-0 shadow-sm mb-3"
+            style="background: #0a0a0a; border-left: 4px solid #1f1f1f;">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <label class="text-white fw-bold mb-1 d-block f-15" style="letter-spacing: 0.5px;">{{
+                        getFriendlyLabel(key) }}</label>
+                    <code class="text-white-25 f-11">{{ key }}</code>
+                </div>
+                <div class="col-md-6 text-end">
+                    @if (getType(key) === 'boolean') {
+                    <div class="form-check form-switch d-inline-block p-0" style="min-height: auto;">
+                        <input class="form-check-input ms-0 custom-switch" type="checkbox" [(ngModel)]="settings[key]"
+                            [id]="key">
+                    </div>
+                    } @else if (getType(key) === 'number') {
+                    <input type="number"
+                        class="form-control form-control-sm bg-dark text-cyan border-dark text-end d-inline-block w-50"
+                        [(ngModel)]="settings[key]">
+                    } @else {
+                    <input type="text"
+                        class="form-control form-control-sm bg-dark text-white border-dark text-end d-inline-block w-75"
+                        [(ngModel)]="settings[key]">
+                    }
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+    }
+</app-card>
+
+<style>
+    .settings-grid {
+        max-height: 70vh;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+    .settings-grid::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .settings-grid::-webkit-scrollbar-thumb {
+        background: #1f1f1f;
+        border-radius: 10px;
+    }
+
+    .setting-item {
+        transition: all 0.3s ease;
+    }
+
+    .setting-item:hover {
+        background: #111 !important;
+        border-left-color: #00e5ff !important;
+        transform: translateX(5px);
+    }
+
+    .custom-switch {
+        width: 3.5em;
+        height: 1.75em;
+        cursor: pointer;
+        background-color: #1f1f1f;
+        border-color: #2a2a2a;
+    }
+
+    .custom-switch:checked {
+        background-color: #00e5ff;
+        border-color: #00e5ff;
+        box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+    }
+
+    .text-cyan {
+        color: #00e5ff;
+    }
+</style>

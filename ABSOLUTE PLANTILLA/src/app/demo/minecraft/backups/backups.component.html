@@ -1,0 +1,68 @@
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="World Backups (Snapshots)">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h5 class="text-white mb-1">Copias de Seguridad</h5>
+                    <p class="text-white-50 f-12 mb-0">Gestiona las capturas de tu mundo para evitar pérdidas
+                        accidentales.</p>
+                </div>
+                <button class="btn btn-primary d-flex align-items-center shadow-sm text-black fw-bold"
+                    (click)="createBackup()" [disabled]="loading">
+                    <i class="anticon icon-plus-circle me-2"></i> Crear Backup Ahora
+                </button>
+            </div>
+
+            <hr class="border-secondary opacity-25">
+
+            <div class="table-responsive mt-2">
+                <table class="table table-dark table-hover mb-0">
+                    <thead class="text-white-50 f-10 text-uppercase fw-bold" style="letter-spacing: 1px;">
+                        <tr>
+                            <th class="border-0">Nombre del Archivo</th>
+                            <th class="border-0">Fecha de Creación</th>
+                            <th class="border-0">Tamaño</th>
+                            <th class="border-0 text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let backup of backups" class="align-middle">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light-primary rounded-circle p-2 me-3 d-flex justify-content-center align-items-center"
+                                        style="width: 32px; height: 32px; background: rgba(0, 229, 255, 0.1) !important;">
+                                        <i class="anticon icon-file-zip text-primary f-14"></i>
+                                    </div>
+                                    <span class="text-white f-14">{{ backup.name }}</span>
+                                </div>
+                            </td>
+                            <td class="text-white-50 f-13">{{ formatDate(backup.date) }}</td>
+                            <td>
+                                <span class="badge bg-dark border border-secondary text-primary px-3 py-1">{{
+                                    backup.size }}</span>
+                            </td>
+                            <td class="text-end">
+                                <button class="btn btn-icon btn-link-danger p-1" (click)="deleteBackup(backup.name)"
+                                    ngbTooltip="Borrar Backup">
+                                    <i class="anticon icon-delete f-16"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="backups.length === 0 && !loading">
+                            <td colspan="4" class="text-center py-5">
+                                <i class="anticon icon-inbox display-4 text-muted mb-3 d-block"></i>
+                                <p class="text-muted">Aún no has creado ninguna copia de seguridad.</p>
+                            </td>
+                        </tr>
+                        <tr *ngIf="loading">
+                            <td colspan="4" class="text-center py-4">
+                                <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                                <span class="text-muted ms-2 f-12">Sincronizando...</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </app-card>
+    </div>
+</div>

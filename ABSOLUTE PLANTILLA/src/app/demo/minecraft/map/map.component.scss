@@ -1,0 +1,13 @@
+.map-container {
+    position: relative;
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+
+    iframe {
+        background: #000;
+    }
+}
+
+.map-overlay {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent);
+}

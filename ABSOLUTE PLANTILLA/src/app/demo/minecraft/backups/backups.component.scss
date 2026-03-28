@@ -1,0 +1,18 @@
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+.badge {
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.btn-link-danger {
+    color: var(--bs-danger);
+    opacity: 0.6;
+
+    &:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
